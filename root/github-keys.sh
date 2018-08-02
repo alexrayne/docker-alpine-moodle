@@ -19,8 +19,18 @@ else
   else
     echo "Importing $user's GitHub pub key(s) to `whoami` account..."
 
-    [ -d ~/.ssh ] || mkdir ~/.ssh
-    [ -f ~/.ssh/authorized_keys ] || touch ~/.ssh/authorized_keys
+    if [ -d ~/.ssh ]; then
+        echo "use ~/ssh"
+    else
+        mkdir ~/.ssh
+        chmod 0700  ~/.ssh
+    fi
+    if [ -f ~/.ssh/authorized_keys ]; then
+        echo "use ~/.ssh/authorized_keys"
+    else
+        touch ~/.ssh/authorized_keys
+        chmod 0600 ~/.ssh/authorized_keys
+    fi
 
     for key in $keys; do
       echo "Imported GitHub $user key: $key"
