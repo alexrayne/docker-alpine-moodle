@@ -18,6 +18,8 @@ This image supports following environment variable for automatically configuring
 | Docker env variable | Description |
 |---------|-------------|
 |REPOSITORY_URL|Link to Neos website distribution|
+|REPOSITORY_WWW|/data/www/ local path where to clone repo, default is `.`|
+|REPOSITORY_CMD| overrides git clone command|
 |VERSION|Git repository branch, commit SHA or release tag, defaults to `master`|
 |SITE_PACKAGE|Neos website package with exported website data to be imported, optional|
 |ADMIN_PASSWORD|If set, would create a Neos `admin` user with such password, optional|

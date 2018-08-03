@@ -13,7 +13,12 @@ mkdir -p /data/tmp/nginx
 # On first launch unpack provisioned files into /data/www
 if [ -f /data/www/composer.json ] || [ -z "$REPOSITORY_URL" ]
 then
-	echo "Do nothing, provisioned files were already moved"
+        if [ -d /data/www/ ]; then
+	    echo "Do nothing, provisioned files were already moved"
+        else
+            echo "Symlink /data/www/ to provisioned files"
+            ln -s /data/www-provisioned /data/www
+        fi
 else
 	if [ -d /data/www/ ]
 	then

@@ -18,8 +18,18 @@ else
     # Install into /data/www
     ###
     cd /data/www-provisioned
-    git clone -b $VERSION $REPOSITORY_URL .
-    composer install --prefer-source
+    if [ -n "$REPOSITORY_URL" ]; then
+       if [ -z "$REPOSITORY_WWW" ]; then
+          REPOSITORY_WWW = '.'
+       fi
+
+       if [ -n "$REPOSITORY_CMD" ]; then
+          $REPOSITORY_CMD
+       else
+          git clone -b $VERSION $REPOSITORY_URL $REPOSITORY_WWW
+       fi
+    fi
+    #composer install --prefer-source
 
     # Apply beard patches
     if [ -f /data/www-provisioned/beard.json ]
@@ -30,8 +40,11 @@ else
     ###
     # Copy DB connection settings
     ###
-    mkdir -p /data/www-provisioned/Configuration
-    cp /Settings.yaml /data/www-provisioned/Configuration/
+    if [ -f "/Settings.yaml" ]
+       then
+           mkdir -p /data/www-provisioned/Configuration
+           cp /Settings.yaml /data/www-provisioned/Configuration/
+    fi
 
     # Set permissions
     chown www-data:www-data -R /tmp/
