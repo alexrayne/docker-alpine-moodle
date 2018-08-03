@@ -1,6 +1,6 @@
 FROM php:7.2-fpm-alpine3.7
 
-MAINTAINER Dmitri Pisarev <dimaip@gmail.com>
+MAINTAINER AlexRayne <alexraynepe196@gmail.com>
 
 ARG PHP_REDIS_VERSION="3.1.6"
 ARG PHP_YAML_VERSION="2.0.2"
@@ -24,16 +24,19 @@ ENV VERSION master
 # Basic build-time metadata as defined at http://label-schema.org
 LABEL org.label-schema.docker.dockerfile="/Dockerfile" \
 	org.label-schema.license="MIT" \
-	org.label-schema.name="Neos Alpine Docker Image" \
-	org.label-schema.url="https://github.com/psmb/docker-neos-alpine" \
-	org.label-schema.vcs-url="https://github.com/psmb/docker-neos-alpine" \
+	org.label-schema.name="Moodle Alpine Docker Image" \
+	org.label-schema.url="https://github.com/alexrayne/docker-alpine-moodle" \
+	org.label-schema.vcs-url="https://github.com/alexrayne/docker-alpine-moodle" \
 	org.label-schema.vcs-type="Git"
 
 RUN set -x \
 	&& apk update \
-	&& apk add tar rsync curl sed bash yaml python py-pip py-setuptools groff less mysql-client git nginx optipng freetype libjpeg-turbo-utils icu-dev openssh pwgen sudo s6 \
-	&& pip install awscli \
-	&& apk del py-pip py-setuptools \
+	&& apk add tar rsync curl sed bash yaml less mysql-client git nginx optipng freetype libjpeg-turbo-utils icu-dev openssh pwgen sudo s6 \
+	&& git config --global user.email "server@server.com" \
+	&& git config --global user.name "Server" \
+	&& rm -rf /var/cache/apk/*
+
+RUN set -x \
 	&& apk add --virtual .phpize-deps $PHPIZE_DEPS libtool freetype-dev libpng-dev libjpeg-turbo-dev yaml-dev \
 	&& docker-php-ext-configure gd \
 		--with-gd \
@@ -57,10 +60,6 @@ RUN set -x \
 	&& apk del .phpize-deps \
 	&& curl -o /tmp/composer-setup.php https://getcomposer.org/installer \
 	&& php /tmp/composer-setup.php --no-ansi --install-dir=/usr/local/bin --filename=composer --version=${COMPOSER_VERSION} && rm -rf /tmp/composer-setup.php \
-	&& curl -s http://beard.famelo.com/ > /usr/local/bin/beard \
-	&& chmod +x /usr/local/bin/beard \
-	&& git config --global user.email "server@server.com" \
-	&& git config --global user.name "Server" \
 	&& rm -rf /var/cache/apk/*
 
 # Copy configuration
