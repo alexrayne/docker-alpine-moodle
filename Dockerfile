@@ -37,12 +37,13 @@ RUN set -x \
 	&& rm -rf /var/cache/apk/*
 
 RUN set -x \
-	&& apk add --virtual .phpize-deps $PHPIZE_DEPS libtool freetype-dev libpng-dev libjpeg-turbo-dev yaml-dev \
+	&& apk add --virtual .phpize-deps $PHPIZE_DEPS libtool freetype-dev libpng-dev libjpeg-turbo-dev yaml-dev libxml2-dev \
 	&& docker-php-ext-configure gd \
 		--with-gd \
 		--with-freetype-dir=/usr/include/ \
 		--with-png-dir=/usr/include/ \
 		--with-jpeg-dir=/usr/include/ \
+		--with-libxml-dir=/usr/include/ \
 	&& docker-php-ext-install \
 		gd \
 		pdo \
@@ -53,6 +54,10 @@ RUN set -x \
 		exif \
 		json \
 		tokenizer \
+		mysqli \
+                zip \
+                xmlrpc \
+                soap \
 	&& pecl install redis-${PHP_REDIS_VERSION} yaml-${PHP_YAML_VERSION} xdebug-${PHP_XDEBUG_VERSION} \
 	&& docker-php-ext-enable xdebug \
 	&& docker-php-ext-enable redis \
